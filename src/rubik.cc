@@ -1,6 +1,7 @@
 #include "rubik.h"
 #include <stdio.h>
 #include <iostream>
+#include <algorithm>
 
 Rubik::Rubik()
 {
@@ -43,6 +44,12 @@ void Rubik::ShowState(){
     }
 }
 
+/* void execute(std::string algorithm){ */
+/*     std::cout << "executing alg" << std::endl; */
+/*     for ( std::string::iterator it=algorithm.begin(); it!=algorithm.end(); ++it) */
+/*         std::cout << *it; */
+/* } */
+
 void Rubik::cycle(short int &c1, short int &c2, short int &c3, short int &c4){
     short int tmp = c1;
     c1 = c4;
@@ -53,9 +60,9 @@ void Rubik::cycle(short int &c1, short int &c2, short int &c3, short int &c4){
 
 void Rubik::cycleCornerOrientation(short int &c1, short int &c2, short int &c3, short int &c4){
     short int tmp = (c1 + 1) % 3;
-    c1 = (c4 - 1) % 3;
+    c1 = (c4 + 2) % 3;
     c4 = (c3 + 1) % 3;
-    c3 = (c2 - 1) % 3;
+    c3 = (c2 + 2) % 3;
     c2 = tmp;
 }
 
@@ -85,14 +92,14 @@ void Rubik::B3(){
     cycleEdgeOrientation(orientation[1][0][z], orientation[2][1][z], orientation[1][2][z], orientation[0][1][z]);
 }
 
-/* void Rubik::B2(){ */
-/*     int z = 0; */
-/*     std::swap(id[0][0][z], id[2][2][z]); */
-/*     std::swap(id[0][2][z], id[2][0][z]); */
+void Rubik::B2(){
+    int z = 0;
+    std::swap(id[0][0][z], id[2][2][z]);
+    std::swap(id[0][2][z], id[2][0][z]);
 
-/*     std::swap(id[1][0][z], id[1][2][z]); */
-/*     std::swap(id[0][1][z], id[2][1][z]); */
-/* } */
+    std::swap(id[1][0][z], id[1][2][z]);
+    std::swap(id[0][1][z], id[2][1][z]);
+}
 
 void Rubik::D(){
     int y = 2;
@@ -112,14 +119,14 @@ void Rubik::D3(){
     cycle(orientation[0][y][1], orientation[1][y][0], orientation[2][y][1], orientation[1][y][2]);
 }
 
-/* void Rubik::D2(){ */
-/*     int y = 2; */
-/*     cycle(id[0][y][0], id[2][y][0], id[2][y][2], id[0][y][2]); */
-/*     cycle(orientation[0][y][0], orientation[2][y][0], orientation[2][y][2], orientation[0][y][2]); */
+void Rubik::D2(){
+    int y = 2;
+    std::swap(id[0][y][0], id[2][y][2]);
+    std::swap(id[2][y][0], id[0][y][2]);
 
-/*     cycle(id[0][y][1], id[1][y][0], id[2][y][1], id[1][y][2]); */
-/*     cycle(orientation[0][y][1], orientation[1][y][0], orientation[2][y][1], orientation[1][y][2]); */
-/* } */
+    std::swap(id[0][y][1], id[2][y][1]);
+    std::swap(id[1][y][2], id[1][y][0]);
+}
 
 void Rubik::F(){
     int z = 2;
@@ -139,14 +146,14 @@ void Rubik::F3(){
     cycleEdgeOrientation(orientation[1][0][z], orientation[0][1][z], orientation[1][2][z], orientation[2][1][z]);
 }
 
-/* void Rubik::F2(){ */
-/*     int z = 2; */
-/*     cycle(id[0][0][z], id[2][0][z], id[2][2][z], id[0][2][z]); */
-/*     cycleCornerOrientation(orientation[0][0][z], orientation[2][0][z], orientation[2][2][z], orientation[0][2][z]); */
+void Rubik::F2(){
+    int z = 2;
+    std::swap(id[0][0][z], id[2][2][z]);
+    std::swap(id[0][2][z], id[2][0][z]);
 
-/*     cycle(id[1][0][z], id[2][1][z], id[1][2][z], id[0][1][z]); */
-/*     cycleEdgeOrientation(orientation[1][0][z], orientation[2][1][z], orientation[1][2][z], orientation[0][1][z]); */
-/* } */
+    std::swap(id[1][0][z], id[1][2][z]);
+    std::swap(id[0][1][z], id[2][1][z]);
+}
 
 void Rubik::L(){
     int x = 0;
@@ -166,14 +173,14 @@ void Rubik::L3(){
     cycleEdgeOrientation(orientation[x][0][1], orientation[x][1][0], orientation[x][2][1], orientation[x][1][2]);
 }
 
-/* void Rubik::L2(){ */
-/*     int x = 0; */
-/*     cycle(id[x][0][0], id[x][0][2], id[x][2][2], id[x][2][0]); */
-/*     cycleCornerOrientation(orientation[x][0][0], orientation[x][0][2], orientation[x][2][2], orientation[x][2][0]); */
+void Rubik::L2(){
+    int x = 0;
+    std::swap(id[x][0][0], id[x][2][2]);
+    std::swap(id[x][0][2], id[x][2][0]);
 
-/*     cycle(id[x][0][1], id[x][1][2], id[x][2][1], id[x][1][0]); */
-/*     cycleEdgeOrientation(orientation[x][0][1], orientation[x][1][2], orientation[x][2][1], orientation[x][1][0]); */
-/* } */
+    std::swap(id[x][0][1], id[x][2][1]);
+    std::swap(id[x][1][2], id[x][1][0]);
+}
 
 void Rubik::R(){
     int x = 2;
@@ -193,14 +200,16 @@ void Rubik::R3(){
     cycleEdgeOrientation(orientation[x][0][1], orientation[x][1][2], orientation[x][2][1], orientation[x][1][0]);
 }
 
-/* void Rubik::R2(){ */
-/*     int x = 2; */
-/*     cycle(id[x][0][0], id[x][0][2], id[x][2][2], id[x][2][0]); */
-/*     cycleCornerOrientation(orientation[x][0][0], orientation[x][0][2], orientation[x][2][2], orientation[x][2][0]); */
 
-/*     cycle(id[x][0][1], id[x][1][2], id[x][2][1], id[x][1][0]); */
-/*     cycleEdgeOrientation(orientation[x][0][1], orientation[x][1][2], orientation[x][2][1], orientation[x][1][0]); */
-/* } */
+void Rubik::R2(){
+    int x = 2;
+    std::swap(id[x][0][0], id[x][2][2]);
+    std::swap(id[x][0][2], id[x][2][0]);
+
+    std::swap(id[x][0][1], id[x][2][1]);
+    std::swap(id[x][1][2], id[x][1][0]);
+}
+
 
 void Rubik::U3(){
     int y = 0;
@@ -220,11 +229,11 @@ void Rubik::U(){
     cycle(orientation[0][y][1], orientation[1][y][0], orientation[2][y][1], orientation[1][y][2]);
 }
 
-/* void Rubik::U2(){ */
-/*     int y = 0; */
-/*     cycle(id[0][y][0], id[2][y][0], id[2][y][2], id[0][y][2]); */
-/*     cycle(orientation[0][y][0], orientation[2][y][0], orientation[2][y][2], orientation[0][y][2]); */
+void Rubik::U2(){
+    int y = 0;
+    std::swap(id[0][y][0], id[2][y][2]);
+    std::swap(id[2][y][0], id[0][y][2]);
 
-/*     cycle(id[0][y][1], id[1][y][0], id[2][y][1], id[1][y][2]); */
-/*     cycle(orientation[0][y][1], orientation[1][y][0], orientation[2][y][1], orientation[1][y][2]); */
-/* } */
+    std::swap(id[0][y][1], id[2][y][1]);
+    std::swap(id[1][y][2], id[1][y][0]);
+}
