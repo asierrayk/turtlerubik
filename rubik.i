@@ -6,4 +6,5 @@
 %}
 
 
+%include "std_string.i"
 %include "src/rubik.h"
