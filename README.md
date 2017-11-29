@@ -18,7 +18,7 @@ Leader Faces
 - The leader sticker of a piece is the one contained in the leader face of its position when the cube is solved.
 - For corners only primary leader faces are necessary.
 - For edges the leader face is one of the primaries if the piece is one of these faces, otherwise the leader face is one of the secondaries.
-
+```
                       ______ ______ ______
                      |      |      |      | 
                      |   0  |   1  |   2  |
@@ -107,3 +107,4 @@ Leader Faces
                                     | /           | /
                                     |/____________|/        
 
+```
